@@ -23,6 +23,3 @@ def about_us():
 @app.route("/contact_us")
 def contact_us():
     return render_template('contact_us.html')
-
-
-app.run()
