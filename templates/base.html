@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Corona Tracker</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
+    {% block head %}
+    {% endblock %}
+</head>
+<body>
+    <section class="header">
+        <div class="titleDiv"><a href="{{ url_for('home') }}"><p class="title">Corona Tester</p></a></div>
+        <div class="menu">
+            <ul>
+                {% block nav %}
+                {% endblock %}
+                <li><label><a href="{{ url_for('about_us') }}">About Us</a></label></li>
+                <li><label><a href="{{ url_for('contact_us') }}">Contact Us</a></label></li>
+            </ul>
+        </div>
+    </section>
+    {% block content %}
+    {% endblock %}
+    <div class="footer">
+        <div class="credits">
+            <p class="credit">Credits : 
+                <a href="#">Akshay</a>,
+                <a href="#">Daman</a>,
+                <a href="#">Deepak</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>

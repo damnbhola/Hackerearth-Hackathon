@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+
+{% block head %}
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.0.0/lib/p5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mappa-mundi@0.0.4"></script>
+    <script src="{{ url_for('static', filename='js/location.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+{% endblock %}
+
+{% block nav %}
+    <li><label id="countrywise" onclick="change('c')">Countrywise</label></li>
+    <li><label id="statewise" onclick="change('s')">Statewise</label></li>
+    <li><label id="locate" onclick="getLocation()">Locate</label></li>
+{% endblock %}
+
+{% block content %}
+    <canvas></canvas>
+{% endblock %}
