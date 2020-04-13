@@ -3,7 +3,7 @@ let myMap;
 let canvas;
 let total_cases = [];
 let total_state_cases = [];
-let total;
+let cases;
 let deaths;
 let recovered;
 let updated;
@@ -84,6 +84,11 @@ function setup() {
             minStateCases = totalCases;
         }
     }
+    for (let row of world_data.rows){
+        cases = Number(row.get('TotalCases'));
+        deaths = Number(row.get('TotalDeaths'));
+        recovered = Number(row.get('TotalRecovered'));
+    }
     let minCasesDiameter = sqrt(minCases);
     let maxCasesDiameter = sqrt(maxCases);
     let minStateCasesDiameter = sqrt(minStateCases);
@@ -97,6 +102,7 @@ function setup() {
     fill(90, 90, 90);
     criteria = total_cases;
 //    fill(200, 0, 0);
+    h1 = createElement("span", "Total Cases " + cases + ", Total Deaths " + deaths + ", Total Recovered " + recovered + ".");
     p = createP();
 }
 
