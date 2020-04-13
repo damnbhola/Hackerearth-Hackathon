@@ -99,9 +99,9 @@ function setup() {
     for (let country of total_state_cases){
         country.Diameter1 = 0.02 * map(sqrt(country.totalCases), minStateCasesDiameter, maxStateCasesDiameter, 1, 1000);
     }
-    fill(90, 90, 90);
+//    fill(90, 90, 90);
     criteria = total_cases;
-//    fill(200, 0, 0);
+    fill(200, 0, 0);
     h1 = createElement("span", "Total Cases " + cases + ", Total Deaths " + deaths + ", Total Recovered " + recovered + ".");
     p = createP();
 }
