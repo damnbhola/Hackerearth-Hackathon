@@ -13,6 +13,13 @@ function getLocation() {
 function showPosition(position) {
   user_lat = position.coords.latitude;
   user_long = position.coords.longitude;
-  t = user_lat + "/" + user_long;
-  p.html(t)
+  t = "https://apiforcorona.herokuapp.com/location/" + user_lat + "/" + user_long;
+
+  var request = new XMLHttpRequest()
+  request.open('GET', t, true)
+  request.onload = function() {
+    var data = JSON.parse(this.response)
+    p.html(data);
+  }
+  request.send()
 }
