@@ -95,7 +95,6 @@ function setup() {
     let maxCasesDiameter = sqrt(maxCases);
     let minStateCasesDiameter = 0;
     let maxStateCasesDiameter = sqrt(maxStateCases);
-    console.log(minStateCasesDiameter, maxStateCasesDiameter);
     for (let country of total_cases){
         country.Diameter = 0.1 * map(sqrt(country.totalCases), minCasesDiameter, maxCasesDiameter, 1, 1000);
     }
@@ -105,7 +104,6 @@ function setup() {
     fill(200, 0, 0);
     h1 = createElement("span", "Total Cases " + cases + ", Total Deaths " + deaths + ", Total Recovered " + recovered + ".");
     p = createP();
-    console.log(total_state_cases);
 }
 
 function draw() {
@@ -120,7 +118,6 @@ function draw() {
     }
     if (criteria == "state"){
         for (let state of total_state_cases){
-            console.log(state.lat, state.lon);
             const coordinate = myMap.latLngToPixel(state.lat, state.lon);
             const zoom = myMap.zoom();
             const scale = pow(1.3, zoom) * sin(frameCount * 0.02);
