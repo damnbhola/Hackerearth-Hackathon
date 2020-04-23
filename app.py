@@ -8,6 +8,7 @@ world = "https://apiforcorona.herokuapp.com/"
 country = "https://apiforcorona.herokuapp.com/country"
 state = "https://apiforcorona.herokuapp.com/state"
 state_district = "https://apiforcorona.herokuapp.com/state_district"
+temp = ['\u016b', '\u015b', '\u0141', '\u0142', '\u015a', '\u0144', '\u0148', '\u010d', '\u0151']
 
 
 @app.route("/")
@@ -25,9 +26,10 @@ def home():
     for i in state_data:
         if '\u016b' in i["id"] or '\u015b' in i["id"] or '\u0141' in i["id"] or '\u0142' in i["id"] or \
                 '\u015a' in i["id"] or '\u0144' in i["id"] or '\u0148' in i["id"] or '\u010d' in i["id"] or \
-                '\u0151' in i["id"]:
+                '\u0151' in i["id"] or '\u0101' in i["id"]:
             continue
         state_content += "\n"
+        i["id"] = i["id"].replace(",", "")
         state_content += ",".join([str(j) for j in i.values()])
     with open("static/assets/world_data.csv", "w+") as file:
         file.write(world_content)
