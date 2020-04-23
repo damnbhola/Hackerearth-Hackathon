@@ -114,7 +114,7 @@ function draw() {
         for (let country of total_cases){
             const coordinate = myMap.latLngToPixel(country.lat, country.lon);
             const zoom = myMap.zoom();
-            const scale = pow(1.3, zoom) * sin(frameCount * 0.025);
+            const scale = pow(1.3, zoom) * sin(frameCount * 0.02);
             ellipse(coordinate.x, coordinate.y, country.Diameter * scale);
         }
     }
