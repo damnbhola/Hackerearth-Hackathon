@@ -13,7 +13,7 @@ let options = {
     zoom: 2,
     style: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png'
 };
-let criteria;
+let criteria = "country";
 
 function preload() {
     world_data = loadTable('static/assets/world_data.csv', 'header');
@@ -50,11 +50,12 @@ function setup() {
         let lat = row.get('Lat');
         let lon = row.get('Long');
         total_cases.push({
+            country,
             lat,
             lon,
             totalCases,
             totalDeaths,
-            totalRecovered,
+            totalRecovered
         });
         if (totalCases > maxCases){
             maxCases = totalCases;
@@ -71,11 +72,12 @@ function setup() {
         let lat = row.get('Lat');
         let lon = row.get('Long');
         total_state_cases.push({
+            country,
             lat,
             lon,
             totalCases,
             totalDeaths,
-            totalRecovered,
+            totalRecovered
         });
         if (totalCases > maxStateCases){
             maxStateCases = totalCases;
@@ -91,36 +93,47 @@ function setup() {
     }
     let minCasesDiameter = sqrt(minCases);
     let maxCasesDiameter = sqrt(maxCases);
-    let minStateCasesDiameter = sqrt(minStateCases);
+    let minStateCasesDiameter = 0;
     let maxStateCasesDiameter = sqrt(maxStateCases);
+    console.log(minStateCasesDiameter, maxStateCasesDiameter);
     for (let country of total_cases){
-        country.Diameter1 = 0.1 * map(sqrt(country.totalCases), minCasesDiameter, maxCasesDiameter, 1, 1000);
+        country.Diameter = 0.1 * map(sqrt(country.totalCases), minCasesDiameter, maxCasesDiameter, 1, 1000);
     }
-    for (let country of total_state_cases){
-        country.Diameter1 = 0.02 * map(sqrt(country.totalCases), minStateCasesDiameter, maxStateCasesDiameter, 1, 1000);
+    for (let state of total_state_cases){
+        state.Diameter = 0.03 * map(sqrt(state.totalCases), minStateCasesDiameter, maxStateCasesDiameter, 1, 1000);
     }
-//    fill(90, 90, 90);
-    criteria = total_cases;
     fill(200, 0, 0);
     h1 = createElement("span", "Total Cases " + cases + ", Total Deaths " + deaths + ", Total Recovered " + recovered + ".");
     p = createP();
+    console.log(total_state_cases);
 }
 
 function draw() {
     clear();
-    for (let country of criteria){
-        const coordinate = myMap.latLngToPixel(country.lat, country.lon);
-        const zoom = myMap.zoom();
-        const scale = pow(1.3, zoom) * sin(frameCount * 0.02);
-        ellipse(coordinate.x, coordinate.y, country.Diameter1 * scale);
+    if (criteria == "country"){
+        for (let country of total_cases){
+            const coordinate = myMap.latLngToPixel(country.lat, country.lon);
+            const zoom = myMap.zoom();
+            const scale = pow(1.3, zoom) * sin(frameCount * 0.025);
+            ellipse(coordinate.x, coordinate.y, country.Diameter * scale);
+        }
+    }
+    if (criteria == "state"){
+        for (let state of total_state_cases){
+            console.log(state.lat, state.lon);
+            const coordinate = myMap.latLngToPixel(state.lat, state.lon);
+            const zoom = myMap.zoom();
+            const scale = pow(1.3, zoom) * sin(frameCount * 0.02);
+            ellipse(coordinate.x, coordinate.y, state.Diameter * scale);
+        }
     }
 }
 
 function change(z){
     if (z == "c"){
-        criteria = total_cases;
+        criteria = "country";
     }
     else if (z == "s"){
-        criteria = total_state_cases;
+        criteria = "state";
     }
 }
