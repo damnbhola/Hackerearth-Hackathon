@@ -97,7 +97,7 @@ function setup() {
         country.Diameter = 0.095 * map(sqrt(country.totalCases), minCasesDiameter, maxCasesDiameter, 0, 1000);
     }
     for (let state of total_state_cases){
-        state.Diameter = 0.03 * map(sqrt(state.totalCases), minStateCasesDiameter, maxStateCasesDiameter, 0, 1000);
+        state.Diameter = 0.031 * map(sqrt(state.totalCases), minStateCasesDiameter, maxStateCasesDiameter, 0, 1000);
     }
     fill(200, 0, 0);
     h1 = createElement("span", "Total " + global + " Cases " + cases + ", Total Deaths " + deaths + ", Total Recovered " + recovered + ".");
@@ -118,7 +118,7 @@ function draw() {
         for (let state of total_state_cases){
             const coordinate = myMap.latLngToPixel(state.lat, state.lon);
             const zoom = myMap.zoom();
-            const scale = pow(1.3, zoom) * sin(frameCount * 0.02);
+            const scale = pow(1.3, zoom) * sin(frameCount * 0.06);
             ellipse(coordinate.x, coordinate.y, state.Diameter * scale);
         }
     }

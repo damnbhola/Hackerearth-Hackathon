@@ -13,12 +13,17 @@ function getLocation() {
 function showPosition(position) {
   user_lat = position.coords.latitude;
   user_long = position.coords.longitude;
-  url = "https://apiforcorona.herokuapp.com/location/" + user_lat + "/" + user_long;
+//  url = "https://apiforcorona.herokuapp.com/location/" + user_lat + "/" + user_long;
+  url = "http://127.0.0.1:4999/location/" + user_lat + "/" + user_long;
   loadJSON(url, gotData);
 }
 
 function gotData(data){
   console.log(data);
-  content = data[0].id + " " + data[0].totalConfirmed;
-  p.html(content);
+  p.html(data[0].location);
+  if (data[0].id.toLowerCase() == data[0].location.toLowerCase()){
+    console.log("yes");
+  }else{
+    console.log("no");
+  }
 }
