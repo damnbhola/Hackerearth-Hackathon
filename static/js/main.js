@@ -3,10 +3,8 @@ let myMap;
 let canvas;
 let total_cases = [];
 let total_state_cases = [];
-let cases;
-let deaths;
-let recovered;
-let updated;
+let total_state_district_cases = [];
+let global, cases, deaths, recovered;
 let options = {
     lat: 0,
     lng: 0,
@@ -19,6 +17,7 @@ function preload() {
     world_data = loadTable('static/assets/world_data.csv', 'header');
     country_data = loadTable('static/assets/country_data.csv', 'header');
     state_data = loadTable('static/assets/state_data.csv', 'header');
+    state_district_data = loadTable('static/assets/state_district_data.csv', 'header');
 }
 
 function setup() {
@@ -65,7 +64,7 @@ function setup() {
         }
     }
     for (let row of state_data.rows){
-        let country = row.get('Country').toLowerCase();
+        let country = row.get('State').toLowerCase();
         let totalCases = Number(row.get('TotalCases'));
         let totalDeaths = Number(row.get('TotalDeaths'));
         let totalRecovered = Number(row.get('TotalRecovered'));
@@ -87,6 +86,7 @@ function setup() {
         }
     }
     for (let row of world_data.rows){
+        global = row.get('Type');
         cases = Number(row.get('TotalCases'));
         deaths = Number(row.get('TotalDeaths'));
         recovered = Number(row.get('TotalRecovered'));
@@ -96,13 +96,13 @@ function setup() {
     let minStateCasesDiameter = 0;
     let maxStateCasesDiameter = sqrt(maxStateCases);
     for (let country of total_cases){
-        country.Diameter = 0.1 * map(sqrt(country.totalCases), minCasesDiameter, maxCasesDiameter, 1, 1000);
+        country.Diameter = 0.095 * map(sqrt(country.totalCases), minCasesDiameter, maxCasesDiameter, 1, 1000);
     }
     for (let state of total_state_cases){
         state.Diameter = 0.03 * map(sqrt(state.totalCases), minStateCasesDiameter, maxStateCasesDiameter, 1, 1000);
     }
     fill(200, 0, 0);
-    h1 = createElement("span", "Total Cases " + cases + ", Total Deaths " + deaths + ", Total Recovered " + recovered + ".");
+    h1 = createElement("span", "Total " + global + " Cases " + cases + ", Total Deaths " + deaths + ", Total Recovered " + recovered + ".");
     p = createP();
 }
 
@@ -112,7 +112,7 @@ function draw() {
         for (let country of total_cases){
             const coordinate = myMap.latLngToPixel(country.lat, country.lon);
             const zoom = myMap.zoom();
-            const scale = pow(1.3, zoom) * sin(frameCount * 0.02);
+            const scale = pow(1.3, zoom) * sin(frameCount * 0.023);
             ellipse(coordinate.x, coordinate.y, country.Diameter * scale);
         }
     }
