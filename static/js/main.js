@@ -14,10 +14,10 @@ let options = {
 let criteria = "country";
 
 function preload() {
-    world_data = loadTable('static/assets/world_data.csv', 'header');
-    country_data = loadTable('static/assets/country_data.csv', 'header');
-    state_data = loadTable('static/assets/state_data.csv', 'header');
-    state_district_data = loadTable('static/assets/state_district_data.csv', 'header');
+    world_data = loadJSON('https://apiforcorona.herokuapp.com/', getData);
+    country_data = loadJSON('https://apiforcorona.herokuapp.com/country', getData);
+    state_data = loadJSON('https://apiforcorona.herokuapp.com/state', getData);
+    state_district_data = loadJSON('https://apiforcorona.herokuapp.com/state_district', getData);
 }
 
 function setup() {
@@ -37,17 +37,21 @@ function setup() {
     myMap = mappa.tileMap(options);
     myMap.overlay(canvas);
     background(50);
+    global = world_data.id;
+    cases = world_data.totalConfirmed;
+    deaths = world_data.totalDeaths;
+    recovered = world_data.totalRecovered;
     let maxCases = 0;
     let maxStateCases = 0;
     let minCases = Infinity;
     let minStateCases = Infinity;
-    for (let row of country_data.rows){
-        let country = row.get('Country').toLowerCase();
-        let totalCases = Number(row.get('TotalCases'));
-        let totalDeaths = Number(row.get('TotalDeaths'));
-        let totalRecovered = Number(row.get('TotalRecovered'));
-        let lat = row.get('Lat');
-        let lon = row.get('Long');
+    for (let row in country_data){
+        let country = country_data[row].id;
+        let totalCases = Number(country_data[row].totalConfirmed);
+        let totalDeaths = Number(country_data[row].totalDeaths);
+        let totalRecovered = Number(country_data[row].totalRecovered);
+        let lat = country_data[row].lat;
+        let lon = country_data[row].long;
         total_cases.push({
             country,
             lat,
@@ -63,13 +67,13 @@ function setup() {
             minCases = totalCases;
         }
     }
-    for (let row of state_data.rows){
-        let country = row.get('State').toLowerCase();
-        let totalCases = Number(row.get('TotalCases'));
-        let totalDeaths = Number(row.get('TotalDeaths'));
-        let totalRecovered = Number(row.get('TotalRecovered'));
-        let lat = row.get('Lat');
-        let lon = row.get('Long');
+    for (let row in state_data){
+        let country = state_data[row].id;
+        let totalCases = Number(state_data[row].totalConfirmed);
+        let totalDeaths = Number(state_data[row].totalDeaths);
+        let totalRecovered = Number(state_data[row].totalRecovered);
+        let lat = state_data[row].lat;
+        let lon = state_data[row].long;
         total_state_cases.push({
             country,
             lat,
@@ -85,21 +89,15 @@ function setup() {
             minStateCases = totalCases;
         }
     }
-    for (let row of world_data.rows){
-        global = row.get('Type');
-        cases = Number(row.get('TotalCases'));
-        deaths = Number(row.get('TotalDeaths'));
-        recovered = Number(row.get('TotalRecovered'));
-    }
     let minCasesDiameter = sqrt(minCases);
     let maxCasesDiameter = sqrt(maxCases);
     let minStateCasesDiameter = 0;
     let maxStateCasesDiameter = sqrt(maxStateCases);
     for (let country of total_cases){
-        country.Diameter = 0.095 * map(sqrt(country.totalCases), minCasesDiameter, maxCasesDiameter, 1, 1000);
+        country.Diameter = 0.095 * map(sqrt(country.totalCases), minCasesDiameter, maxCasesDiameter, 0, 1000);
     }
     for (let state of total_state_cases){
-        state.Diameter = 0.03 * map(sqrt(state.totalCases), minStateCasesDiameter, maxStateCasesDiameter, 1, 1000);
+        state.Diameter = 0.03 * map(sqrt(state.totalCases), minStateCasesDiameter, maxStateCasesDiameter, 0, 1000);
     }
     fill(200, 0, 0);
     h1 = createElement("span", "Total " + global + " Cases " + cases + ", Total Deaths " + deaths + ", Total Recovered " + recovered + ".");
@@ -133,4 +131,8 @@ function change(z){
     else if (z == "s"){
         criteria = "state";
     }
+}
+
+function getData(data){
+    return data;
 }
