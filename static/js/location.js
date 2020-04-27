@@ -13,8 +13,7 @@ function getLocation() {
 function showPosition(position) {
   user_lat = position.coords.latitude;
   user_long = position.coords.longitude;
-//  url = "https://apiforcorona.herokuapp.com/location/" + user_lat + "/" + user_long;
-  url = "http://127.0.0.1:4999/location/" + user_lat + "/" + user_long;
+  url = "https://apiforcorona.herokuapp.com/location/" + user_lat + "/" + user_long;
   loadJSON(url, gotData);
 }
 
