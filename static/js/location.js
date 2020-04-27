@@ -14,7 +14,6 @@ function showPosition(position) {
   user_lat = position.coords.latitude;
   user_long = position.coords.longitude;
   url = "https://apiforcorona.herokuapp.com/location/" + user_lat + "/" + user_long;
-  loadJSON(url, gotData, 'jsonp');
   loadJSON(url, gotData);
   p.html(url);
 }
