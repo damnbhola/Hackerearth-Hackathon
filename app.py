@@ -8,7 +8,6 @@ world = "https://apiforcorona.herokuapp.com/"
 country = "https://apiforcorona.herokuapp.com/country"
 state = "https://apiforcorona.herokuapp.com/state"
 state_district = "https://apiforcorona.herokuapp.com/state_district"
-temp = ['\u016b', '\u015b', '\u0141', '\u0142', '\u015a', '\u0144', '\u0148', '\u010d', '\u0151']
 
 
 @app.route("/")
@@ -16,9 +15,11 @@ def home():
     world_data = requests.get(world).json()
     country_data = requests.get(country).json()
     state_data = requests.get(state).json()
-    world_content = "Country,TotalCases,TotalDeaths,TotalRecovered\n"
+    state_district_data = requests.get(state_district).json()
+    world_content = "Type,TotalCases,TotalDeaths,TotalRecovered\n"
     country_content = "Country,Lat,Long,TotalCases,TotalDeaths,TotalRecovered"
-    state_content = "Country,Lat,Long,TotalCases,TotalDeaths,TotalRecovered"
+    state_content = "State,Lat,Long,TotalCases,TotalDeaths,TotalRecovered"
+    state_district_content = "District,Lat,Long,TotalCases,TotalDeaths,TotalRecovered"
     world_content += ",".join([str(j) for j in world_data.values()])
     for i in country_data:
         country_content += "\n"
@@ -31,12 +32,22 @@ def home():
         state_content += "\n"
         i["id"] = i["id"].replace(",", "")
         state_content += ",".join([str(j) for j in i.values()])
+    for i in state_district_data:
+        if '\u016b' in i["id"] or '\u015b' in i["id"] or '\u0141' in i["id"] or '\u0142' in i["id"] or \
+                '\u015a' in i["id"] or '\u0144' in i["id"] or '\u0148' in i["id"] or '\u010d' in i["id"] or \
+                '\u0151' in i["id"] or '\u0101' in i["id"]:
+            continue
+        state_district_content += "\n"
+        i["id"] = i["id"].replace(",", "")
+        state_district_content += ",".join([str(j) for j in i.values()])
     with open("static/assets/world_data.csv", "w+") as file:
         file.write(world_content)
     with open("static/assets/country_data.csv", "w+") as file:
         file.write(country_content)
     with open("static/assets/state_data.csv", "w+") as file:
         file.write(state_content)
+    with open("static/assets/state_district_data.csv", "w+") as file:
+        file.write(state_district_content)
     return render_template('index.html')
 
 
